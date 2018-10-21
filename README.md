@@ -1,6 +1,6 @@
 # Tutorial: android [fore](https://erdo.github.io/android-fore/) basics
 
-git repo for the medium tutorial
+git repo for the android fore basics [medium tutorial](https://medium.com/@erdo9000/tutorial-android-fore-basics-fb10788d388c)
 
 
 ![tutorial app fore basics](https://j.gifs.com/oQ3ZEz.gif)
