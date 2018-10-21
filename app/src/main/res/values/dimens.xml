@@ -1,0 +1,5 @@
+<resources>
+    <dimen name="slot_spacer">20dp</dimen>
+    <dimen name="slot_icon_size">25dp</dimen>
+    <dimen name="slot_handle_width">45dp</dimen>
+</resources>

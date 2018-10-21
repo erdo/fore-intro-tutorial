@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<foo.bar.example.foreintro.ui.SlotMachineView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/slot_spacer">
+
+    <ImageView
+        android:id="@+id/slots_machine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/slot_spacer"
+        android:layout_marginStart="@dimen/slot_spacer"
+        android:contentDescription="slot machine background"
+        android:scaleType="fitCenter"
+        android:src="@drawable/machine" />
+
+    <!-- central slot -->
+
+    <foo.bar.example.foreintro.ui.widget.SlotView
+        android:id="@+id/slots_2_slotview"
+        android:layout_width="@dimen/slot_icon_size"
+        android:layout_height="@dimen/slot_icon_size"
+        android:layout_centerInParent="true"
+        android:background="@drawable/slots_dice"
+        android:contentDescription="2nd slot" />
+
+    <!-- left most slot -->
+
+    <foo.bar.example.foreintro.ui.widget.SlotView
+        android:id="@+id/slots_1_slotview"
+        android:layout_width="@dimen/slot_icon_size"
+        android:layout_height="@dimen/slot_icon_size"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/slots_2_slotview"
+        android:background="@drawable/slots_bell"
+        android:contentDescription="1st slot" />
+
+    <!-- right most slot -->
+
+    <foo.bar.example.foreintro.ui.widget.SlotView
+        android:id="@+id/slots_3_slotview"
+        android:layout_width="@dimen/slot_icon_size"
+        android:layout_height="@dimen/slot_icon_size"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/slots_2_slotview"
+        android:background="@drawable/slots_cherry"
+        android:contentDescription="3rd slot" />
+
+    <!-- slot machine handle -->
+
+    <ImageView
+        android:id="@+id/slots_handle_imageview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/slots_machine"
+        android:src="@drawable/slot_handle_selector" />
+
+    <ImageView
+        android:id="@+id/slots_win"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/slots_win" />
+
+</foo.bar.example.foreintro.ui.SlotMachineView>
