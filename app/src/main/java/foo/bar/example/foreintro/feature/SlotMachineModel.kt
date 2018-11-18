@@ -13,7 +13,7 @@ import java.util.Random
 class SlotMachineModel constructor(
         val stateFetcher: RandomStateFetcher,
         val logger: Logger,
-        val workMode: WorkMode?) : ObservableImp(workMode) {
+        val workMode: WorkMode) : ObservableImp(workMode) {
 
     enum class State {
         SPINNING,
@@ -43,7 +43,7 @@ class SlotMachineModel constructor(
         if (wheel.state != State.SPINNING) {
             wheel.state = State.SPINNING
             notifyObservers()
-            AsyncBuilder<Void, State>(workMode)
+            AsyncBuilder<Unit, State>(workMode)
                 .doInBackground {
                     stateFetcher.fetchRandom(randomDelayMs())
                 }
