@@ -11,9 +11,9 @@ import java.util.Random
  * Copyright © 2018 early.co. All rights reserved.
  */
 class SlotMachineModel constructor(
-        val stateFetcher: RandomStateFetcher,
-        val logger: Logger,
-        val workMode: WorkMode) : ObservableImp(workMode) {
+        private val stateFetcher: RandomStateFetcher,
+        private val logger: Logger,
+        private val workMode: WorkMode) : ObservableImp(workMode) {
 
     enum class State {
         SPINNING,
