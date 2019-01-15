@@ -1,6 +1,6 @@
 # Tutorial: android [fore](https://erdo.github.io/android-fore/) basics
 
-git repo for the android fore basics [medium tutorial](https://medium.com/@erdo9000/tutorial-android-fore-basics-fb10788d388c)
+git repo for the android fore basics [dev.to tutorial](https://dev.to/erdo/tutorial-android-fore-basics-1155)
 
 
 ![tutorial app fore basics](https://j.gifs.com/oQ3ZEz.gif)
@@ -9,7 +9,7 @@ git repo for the android fore basics [medium tutorial](https://medium.com/@erdo9
 ## License
 
 
-    Copyright 2017-2018 early.co
+    Copyright 2017-2019 early.co
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
