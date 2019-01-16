@@ -35,7 +35,7 @@ _**More complicated**: A lot of architectures start to show the strain once you 
 **fore** implements the [Model View Observer](https://erdo.github.io/android-fore/00-architecture.html#shoom) architecture, we'll tackle each component in turn:
 
 ## Model
-We need a model to drive our slot machine, we’re going to call it **SlotMachineModel**. It’s going to have a **spin()** method which will set the wheels spinning, the 3 wheels are going to either be spinning or showing a cherry, a dice, or a bell. (Ok so I’ve never actually played a real slot machine, sucks to be me ;p).
+We need a model to drive our slot machine, we’re going to call it **SlotMachineModel**. It’s going to have a **spin()** method which will set the wheels spinning. The 3 wheels are going to either be spinning or showing a cherry, a dice, or a bell. (Ok so I’ve never actually played a real slot machine, sucks to be me ;p).
 
 Let’s keep it simple and have three methods called: **getState1()**, **getState2()**, **getState3()**. And they can return an enum for each wheel with one of these states: **SPINNING**, **CHERRY**, **DICE**, **BELL**
 
@@ -120,8 +120,8 @@ That should do for our model, a few things to notice:
 - We are calling **notifyObservers()** immediately, whenever any of our model’s state changes
 - We are passing in a **WorkMode** dependency that controls how the notifications are sent and makes things easy to test
 - Everything is designed to run on the **UI thread** apart from when we explicitly jump to a background thread to fetch the wheel states (this is where networking usually happens)
-- We’re using **fore**’s **AsyncBuilder** (which is just a wrapper around AsyncTask) that supports lambdas and also lets us run it in Synchronous mode if we want to (e.g. for tests)
-- This Model know nothing about android view layer classes or contexts
+- We’re using **fore**’s **AsyncBuilder** for that (which is just a wrapper around AsyncTask that supports lambdas). This lets us easily run the code in Synchronous mode if we want to (e.g. for tests), but you could use RxJava or coroutines for this too.
+- This Model knows nothing about android view layer classes or contexts
 - We’re also using a RandomStateFetcher dependency to fetch the actual state (nothing to do with fore, this just makes things easier to test, it’s also where you might put networking code in future, see [here](https://erdo.github.io/android-fore/#fore-4-retrofit-example) for a simple app with a networking layer)
 
 Much more information and a big checklist for writing models when you’re using fore is [here](https://erdo.github.io/android-fore/02-models.html#shoom)
