@@ -22,8 +22,10 @@ class SlotMachineView @JvmOverloads constructor(
         context: Context?,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0,
-        defStyleRes: Int = 0) :
-        RelativeLayout(context, attrs, defStyleAttr), SyncableView {
+        defStyleRes: Int = 0
+) :
+    RelativeLayout(context, attrs, defStyleAttr),
+    SyncableView {
 
 
     //models that we need
