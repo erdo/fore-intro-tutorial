@@ -51,21 +51,10 @@ internal class ObjectGraph {
         }
     }
 
-    operator fun <T> get(model: Class<T>): T {
+    operator fun <T> get(model: Class<T>): T = model.cast(dependencies[model]) as T
 
-        notNull(model)
-        val t = model.cast(dependencies[model])
-        notNull(t)
-
-        return t
-    }
-
-    fun <T> putMock(clazz: Class<T>, `object`: T) {
-
-        notNull(clazz)
-        notNull(`object`)
-
-        dependencies.put(clazz, `object`!!)
+    fun <T> putMock(clazz: Class<T>, instance: T) {
+        dependencies[clazz] = instance as Any
     }
 
 }

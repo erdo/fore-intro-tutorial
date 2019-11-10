@@ -21,8 +21,7 @@ import kotlinx.android.synthetic.main.activity_main.view.slots_win
 class SlotMachineView @JvmOverloads constructor(
         context: Context?,
         attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0,
-        defStyleRes: Int = 0
+        defStyleAttr: Int = 0
 ) :
     RelativeLayout(context, attrs, defStyleAttr),
     SyncableView {
@@ -33,7 +32,7 @@ class SlotMachineView @JvmOverloads constructor(
     private lateinit var logger: Logger
 
     //single observer reference
-    internal var observer = this::syncView
+    private var observer = this::syncView
 
 
     override fun onFinishInflate() {
