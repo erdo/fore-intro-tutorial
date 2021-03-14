@@ -1,9 +1,10 @@
 package foo.bar.example.foreintro.feature
 
 import co.early.fore.core.WorkMode
-import co.early.fore.core.logging.Logger
-import co.early.fore.core.observer.ObservableImp
+import co.early.fore.core.observer.Observable
 import co.early.fore.core.threading.AsyncBuilder
+import co.early.fore.kt.core.logging.Logger
+import co.early.fore.kt.core.observer.ObservableImp
 import java.util.Random
 
 /**
@@ -13,7 +14,7 @@ import java.util.Random
 class SlotMachineModel constructor(
         private val stateFetcher: RandomStateFetcher,
         private val logger: Logger,
-        private val workMode: WorkMode) : ObservableImp(workMode) {
+        private val workMode: WorkMode) : Observable by ObservableImp(workMode) {
 
     enum class State {
         SPINNING,
