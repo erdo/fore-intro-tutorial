@@ -32,7 +32,7 @@ class SlotMachineView @JvmOverloads constructor(
     private lateinit var logger: Logger
 
     //single observer reference
-    private var observer = this::syncView
+    private val observer = Observer { syncView() }
 
 
     override fun onFinishInflate() {
