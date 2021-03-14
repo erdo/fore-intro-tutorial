@@ -4,8 +4,17 @@ published: true
 description: develop a basic slot machine game
 cover_image: https://thepracticaldev.s3.amazonaws.com/i/b6bgzs5na0xrag5a6b8b.png
 tags: Android, Kotlin, fore, MVO
-series: android fore tutorials
 ---
+
+_This is part of a series on android [fore](https://erdo.github.io/android-fore/)_
+
+| Tutorials in Series                 |
+|:------------------------------------|
+|1) Tutorial: [Spot the deliberate bug](https://dev.to/erdo/tutorial-spot-the-deliberate-bug-165k) |
+|2) Tutorial: [Android fore basics](https://dev.to/erdo/tutorial-android-fore-basics-1155) |
+|3) Tutorial: [Android architecture blueprints, full todo app (MVO edition)](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) |
+|4) Tutorial: [Android state v. event](https://dev.to/erdo/tutorial-android-state-v-event-3n31)|
+|5) Tutorial: [Kotlin Coroutines, Retrofit and fore](https://dev.to/erdo/tutorial-kotlin-coroutines-retrofit-and-fore-3874)|
 
 Let’s write a simple slot machine game. We’ll use the tiny [**fore**](https://erdo.github.io/android-fore/) library to demonstrate:
 
@@ -22,9 +31,9 @@ We’ll write this one in Kotlin, because Kotlin.
 
 -----
 
-_**More simple**: For even simpler examples see the fore github repo. It comes with a number of tiny app examples covering just: [reative-ui](https://erdo.github.io/android-fore/#fore-1-reactive-ui-example) basics, [asynchronous code](https://erdo.github.io/android-fore/#fore-2-asynchronous-code-example), [adapters](https://erdo.github.io/android-fore/#fore-3-adapter-example), [networking](https://erdo.github.io/android-fore/#fore-4-retrofit-example) (with Retrofit2), [animations and lifecycle](https://erdo.github.io/android-fore/#fore-5-ui-helpers-example-tic-tac-toe), and [db driven apps](https://erdo.github.io/android-fore/#fore-6-db-example-room-db-driven-to-do-list) (with Room)_
+_**More simple**: For even simpler examples see the fore github repo. It comes with a number of tiny app examples covering just: [reactive-ui](https://erdo.github.io/android-fore/#fore-1-reactive-ui-example) basics, [asynchronous code](https://erdo.github.io/android-fore/#fore-2-asynchronous-code-example), [adapters](https://erdo.github.io/android-fore/#fore-3-adapter-example), [networking](https://erdo.github.io/android-fore/#fore-4-retrofit-example) (with Retrofit2, but other samples in the fore repo use Ktor and also Apollo for graphQL APIs) and [db driven apps](https://erdo.github.io/android-fore/#fore-6-db-example-room-db-driven-to-do-list) (with Room)_
 
-_**More complicated**: A lot of architectures start to show the strain once you move beyond trivial complexity. Complexity at the UI layer is something that **fore** handles particularly well, and there is a larger more complex app code base [here](https://github.com/erdo/fore-full-example-01-kotlin) to help you investigate that_
+_**More complicated**: A lot of architectures start to show the strain once you move beyond trivial complexity. Complexity at the UI layer is something that **fore** handles particularly well, and there is a larger more complex app discussed [here](https://dev.to/erdo/tutorial-android-architecture-blueprints-full-todo-app-mvo-edition-259o) to help you investigate that_
 
 -----
 
@@ -32,7 +41,7 @@ _**More complicated**: A lot of architectures start to show the strain once you 
 
 ![MVO](https://thepracticaldev.s3.amazonaws.com/i/nhwuewbqjn1e6rdkvwq0.png)
 
-**fore** implements the [Model View Observer](https://erdo.github.io/android-fore/00-architecture.html#shoom) architecture, we'll tackle each component in turn:
+**fore** is ideal for implementing the [Model View Observer](https://erdo.github.io/android-fore/00-architecture.html#shoom) architecture, we'll tackle each component in turn:
 
 ## Model
 We need a model to drive our slot machine, we’re going to call it **SlotMachineModel**. It’s going to have a **spin()** method which will set the wheels spinning. The 3 wheels are going to either be spinning or showing a cherry, a dice, or a bell. (Ok so I’ve never actually played a real slot machine, sucks to be me ;p).
@@ -43,12 +52,13 @@ We’ll also have an **isWon()** method that’s always going to return false, u
 
 To build up the suspense (and let you check rotation support for yourselves) we will do the spinning calculations *asynchronously* and we will take our time about it, by randomly adding a few seconds delay to each spin.
 
-Last but by no means least: the **Model needs to be Observable**, whenever this model’s state changes, it needs to let its observers know that it’s changed. (You might want to put your phone in landscape for the code bit if you're not at your desk)
+Last but by no means least: the **Model needs to be Observable**, whenever this model’s state changes, it needs to let its observers know that it’s changed. (If you're on your phone you might want to put it in landscape mode to read the following code snippets)
 
 ``` kotlin
 class SlotMachineModel constructor(
         private val stateFetcher: RandomStateFetcher,
-        private val workMode: WorkMode) : ObservableImp(workMode) {
+        private val workMode: WorkMode)
+: Observable by ObservableImp(workMode) {
 
     enum class State {
         SPINNING,
@@ -118,13 +128,13 @@ class SlotMachineModel constructor(
 That should do for our model, a few things to notice:
 
 - We are calling **notifyObservers()** immediately, whenever any of our model’s state changes
-- We are passing in a **WorkMode** dependency that controls how the notifications are sent and makes things easy to test
+- We are passing in a **WorkMode** dependency that controls how the notifications are sent and makes things easy to test (this shows what's happening very clearly, but it's not necessary with more recent versions of fore)
 - Everything is designed to run on the **UI thread** apart from when we explicitly jump to a background thread to fetch the wheel states (this is where networking usually happens)
-- We’re using **fore**’s **AsyncBuilder** for that (which is just a wrapper around AsyncTask that supports lambdas). This lets us easily run the code in Synchronous mode if we want to (e.g. for tests), but you could use RxJava or coroutines for this too.
+- We’re using **fore**’s **AsyncBuilder** for that (which is just a wrapper around AsyncTask that supports lambdas). This lets us easily run the code in Synchronous mode if we want to (e.g. for tests), but you can use coroutines for this too.
 - This Model knows nothing about android view layer classes or contexts
 - We’re also using a RandomStateFetcher dependency to fetch the actual state (nothing to do with fore, this just makes things easier to test, it’s also where you might put networking code in future, see [here](https://erdo.github.io/android-fore/#fore-4-retrofit-example) for a simple app with a networking layer)
 
-Much more information and a big checklist for writing models when you’re using fore is [here](https://erdo.github.io/android-fore/02-models.html#shoom)
+Much more information and a big checklist for writing models when you’re using fore is [here](https://erdo.github.io/android-fore/02-models.html#model-checklist)
 
 ## View
 
@@ -225,7 +235,7 @@ class SlotMachineView @JvmOverloads constructor(
     private lateinit var slotMachineModel: SlotMachineModel
 
     //single observer reference
-    internal var observer = this::syncView
+    val observer = Observer { syncView() }
 
 
     override fun onFinishInflate() {
@@ -239,8 +249,8 @@ class SlotMachineView @JvmOverloads constructor(
     }
 
 
-    private fun getModelReferences() {
-        slotMachineModel = App.get(SlotMachineModel::class.java)
+    private fun getModelReferences() {   
+        slotMachineModel = OG[SlotMachineModel::class.java]
     }
 
     private fun setClickListeners() {
@@ -254,9 +264,7 @@ class SlotMachineView @JvmOverloads constructor(
         slots_1_slotview.setState(slotMachineModel.getState1())
         slots_2_slotview.setState(slotMachineModel.getState2())
         slots_3_slotview.setState(slotMachineModel.getState3())
-        slots_win.visibility = if (slotMachineModel.isWon())
-                               View.VISIBLE else View.INVISIBLE
-    }
+        slots_win.showOrInvisible(slotMachineModel.isWon())
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
@@ -286,7 +294,7 @@ All the **Model** needed to do to become observable was to extend **fore**’s *
 
 For the **View**, all it had to do to observe the Model was to **add** and **remove** its Observable in line with the Android lifecycle methods, and to call **syncView()** whenever the model notified it of a change.
 
-Threading issues are taken care of here as everything operates on the UI thread (including the observer notifications) which is exactly how you need UI code to be run anyway. Asynchronous code is run away from the UI layer, inside the model and is completed before the lightweight notifications are fired in the UI thread (this is also how **fore** is able to support [adapters](https://erdo.github.io/android-fore/04-more-fore.html#adapters-notifydatasetchangedauto) in a very similar manner).
+Threading issues are taken care of here as everything operates on the UI thread (including the observer notifications) which is exactly how you need UI code to be run anyway. Asynchronous code is run away from the UI layer, inside the model and is completed before the lightweight notifications are fired in the UI thread.
 
 We didn’t mention [DI](https://erdo.github.io/android-fore/05-extras.html#dependency-injection-basics) yet, but it’s key. The line you see in the View:
 
@@ -298,11 +306,11 @@ provides the view with the same instance of the model each time, so that everyth
 ![automatically supports rotation](https://thepracticaldev.s3.amazonaws.com/i/0s05vx6ror703z1h074x.gif)
 <figcaption>as promised… this already supports rotation</figcaption>
 
-For completeness and so that you can see how tiny it is, this is the [activity code](https://github.com/erdo/fore-intro-tutorial/blob/master/app/src/main/java/foo/bar/example/foreintro/ui/MainActivity.kt) we use to launch the view
+For completeness and so that you can see how tiny it is, this is the [activity code](https://github.com/erdo/fore-intro-tutorial/blob/master/app/src/main/java/foo/bar/example/foreintro/ui/MainActivity.kt) we use to launch the view (you might want to combine the view and the activity classes, but we've separated them here for clarity)
 
 ## Testing
 
-Because there is so much separation between the view layer and the rest of the app, this code is particularly testable. The main [fore repo](https://erdo.github.io/android-fore/) has a lot of sample apps, many of which are tested extensively if want to study test examples.
+Because there is so much separation between the view layer and the rest of the app, this code is particularly testable. The main [fore repo](https://github.com/erdo/android-fore/) has a lot of sample apps, many of which are tested extensively if want to study test examples.
 
 ## Now for the really cool stuff…
 
@@ -333,7 +341,7 @@ override fun onDetachedFromWindow() {
 }
 ```
 
-And if you have a strong objection to that level of boiler plate, there are a few [lifecycle classes](https://erdo.github.io/android-fore/04-more-fore.html#lifecycle-components) available in fore that will do it for you ;)
+And if you have a strong objection to that level of boiler plate, you can use an [ObservableGroup](https://erdo.github.io/android-fore/01-views.html#removing-even-more-boiler-plate) here (which is only possible because the observer api in each case is identical)
 
 As for the Models themselves, they don’t even know how many views might be observing them, it makes no difference to their code at all.
 
@@ -357,6 +365,7 @@ weather_text.setTextColor(resources.getColor(
                              if (weatherModel.windSpeed>50)
                                    R.color.red else R.color.blue))
 ```
+_Or if you want that small piece of logic unit testable, then put it in a model (a viewModel would be ideal) and the simply call it from your view: model.getWeatherColor()_
 
 This code might make things look very easy, but there are many ways to get things wrong of course, if there’s something in your app that doesn’t feel right or you’re having any performance issues - chances are you’ll find some guidance in the check list [here](https://erdo.github.io/android-fore/05-extras.html#troubleshooting--how-to-smash-code-reviews).
 
@@ -364,6 +373,6 @@ This code might make things look very easy, but there are many ways to get thing
 
 Well thanks for reading this far!
 
-Hopefully this gives you some ideas about how you could make use of the **fore** library or just **MVO** to write quicker, cleaner, more testable apps. I use it all the time during my work as it is production ready (it’s a very small library so there is not a lot to go wrong). There are lots more considerations to discuss when you look at [adapters](https://erdo.github.io/android-fore/#fore-3-adapter-example), [animations](https://erdo.github.io/android-fore/#fore-5-ui-helpers-example-tic-tac-toe), [databases](https://erdo.github.io/android-fore/#fore-6-db-example-room-db-driven-to-do-list) etc, but they are all treated in the **same standard way** using the syncView() convention. For the moment the best place to look for clear examples is in the [fore github repo](https://erdo.github.io/android-fore/).
+Hopefully this gives you some ideas about how you could make use of the **fore** library or just **MVO** to write quicker, cleaner, more testable apps. I use it all the time during my work as it is production ready (it’s a very small library so there is not a lot to go wrong). There are lots more considerations to discuss when you look at [networking](https://erdo.github.io/android-fore/#fore-4-retrofit-example), [adapters](https://erdo.github.io/android-fore/#fore-3-adapter-example), [databases](https://erdo.github.io/android-fore/#fore-6-db-example-room-db-driven-to-do-list) etc but they are all treated in the **same standard way** using the syncView() convention. For the moment the best place to look for clear examples is in the [fore github repo](https://erdo.github.io/android-fore/).
 
 here’s the [complete code](https://github.com/erdo/fore-intro-tutorial) for the tutorial
