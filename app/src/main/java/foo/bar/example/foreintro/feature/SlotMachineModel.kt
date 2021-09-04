@@ -2,7 +2,8 @@ package foo.bar.example.foreintro.feature
 
 import co.early.fore.core.WorkMode
 import co.early.fore.core.observer.Observable
-import co.early.fore.core.threading.AsyncBuilder
+import co.early.fore.kt.core.coroutine.awaitMain
+import co.early.fore.kt.core.coroutine.launchIO
 import co.early.fore.kt.core.logging.Logger
 import co.early.fore.kt.core.observer.ObservableImp
 import java.util.Random
@@ -44,14 +45,13 @@ class SlotMachineModel constructor(
         if (wheel.state != State.SPINNING) {
             wheel.state = State.SPINNING
             notifyObservers()
-            AsyncBuilder<Unit, State>(workMode)
-                .doInBackground {
-                    stateFetcher.fetchRandom(randomDelayMs())
+            launchIO {
+                val newState = stateFetcher.fetchRandom(randomDelayMs())
+                awaitMain {
+                    wheel.state = newState
+                    notifyObservers()
                 }
-                .onPostExecute { state ->
-                    wheel.state = state; notifyObservers()
-                }
-                .execute()
+            }
         }
     }
 
